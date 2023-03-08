@@ -1,0 +1,2 @@
+# Ferrofluid Audivisualizer
+Elsys prosjekt
