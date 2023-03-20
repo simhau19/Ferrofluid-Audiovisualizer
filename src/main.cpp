@@ -1,10 +1,15 @@
 #include <Arduino.h>
 #include "arduinoFFT.h"
+#include "sample_periode.h"
+#include "fft.h"
 
-void setup() {
-  // put your setup code here, to run once:
+void setup()
+{
+  Serial.begin(115200);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
+  fftLoop();
 }
+
