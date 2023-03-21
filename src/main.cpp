@@ -3,9 +3,11 @@
 #include "sample_periode.h"
 #include "fft.h"
 #include "ADCSampler.h"
-#include "adc.h"
+#include "ADCFast.h"
 
-ADC2 adc(ADC2_CHANNEL_0);
+
+uint16_t adc_buffer[1024];
+ADCFast adc(ADC1_CHANNEL_0, 44100, adc_buffer, sizeof(adc_buffer));
 
 void setup()
 {
@@ -16,24 +18,20 @@ void setup()
 
 void loop()
 {
-  // const int sample_size = 1000;
-  // Serial.println("Start sampling");
+  const int sample_size = 1024;
+  //Serial.println("Start sampling");
   
-  // unsigned long last_micros = micros();
-  // for (int i = 0; i < sample_size; i++)
-  // {
-  //   adc.read();
-  // }
-  
-  // float sampling_time = ((float) micros() - last_micros)/sample_size;
-  // Serial.println(sampling_time);
-  Serial.print("CPU: ");
-  Serial.print(getCpuFrequencyMhz());
-  Serial.print("MHz\nXTAL: ");
-  Serial.print(getXtalFrequencyMhz());
-  Serial.print("MHz\nAPB: ");
-  Serial.println(getApbFrequency());
+  unsigned long last_micros = micros();
+  uint32_t read = adc.read();
+  float sampling_time = ((float) micros() - last_micros);
 
+  for (int i = 0; i < 1024; i++)
+  {
+    Serial.print("V: ");
+    Serial.println(adc_buffer[i]);
+  }
+  
+  
   delay(1000);
 }
 
