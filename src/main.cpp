@@ -2,7 +2,6 @@
 #include "arduinoFFT.h"
 #include "sample_periode.h"
 #include "fft.h"
-#include "ADCSampler.h"
 #include "ADCFast.h"
 
 
