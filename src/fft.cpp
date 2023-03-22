@@ -56,6 +56,8 @@ for (int i = 0; i < samples; i++){
     while((micros() - new_time) < samplingPeriodUs) {/*venter*/}
 }
 
+
+
 //Utfører FFT (magi)
 FFT.DCRemoval(); //Fjerner likespenningskomponent
 FFT.Windowing(FFT_WIN_TYP_HAMMING, FFT_FORWARD);
@@ -102,11 +104,13 @@ for (int i = 0; i < pinCount; i++){
 }
 Serial.println();
 Serial.println(analogValues[3]);
-Serial.println();*/
+Serial.println();
+
+*/
 for (int i = 0; i < pinCount; i++){
     Serial.println(analogValues[i]);
 }
-/**/
+
 
 
 analogWrite(frekPins[0], analogValues[0]);
