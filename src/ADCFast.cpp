@@ -30,18 +30,21 @@ void ADCFast::init(){
     Serial.println("Error setting adc attenuation");
   }
 
-  i2s_adc_enable(i2s_port);
+  //i2s_adc_enable(i2s_port);
 
   Serial.println("I2S setup complete");
 
 }
 
 uint32_t ADCFast::read(){
+
+    //enabling and disabling i2s_adc makes the audio response faster???
     
     uint32_t bytes_read;
+    i2s_adc_enable(i2s_port);
     if(i2s_read(i2s_port, buff, buff_size, &bytes_read, portMAX_DELAY) != ESP_OK){
         Serial.println("Error sampling adc");
     };
-    
+    i2s_adc_disable(i2s_port);
     return bytes_read;
 }
