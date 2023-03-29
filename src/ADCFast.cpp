@@ -30,8 +30,6 @@ void ADCFast::init(){
     Serial.println("Error setting adc attenuation");
   }
 
-  i2s_adc_enable(i2s_port);
-
   Serial.println("I2S setup complete");
 
 }
@@ -39,9 +37,11 @@ void ADCFast::init(){
 uint32_t ADCFast::read(){
     
     uint32_t bytes_read;
+    i2s_adc_enable(i2s_port);
     if(i2s_read(i2s_port, buff, buff_size, &bytes_read, portMAX_DELAY) != ESP_OK){
         Serial.println("Error sampling adc");
     };
+    i2s_adc_disable(i2s_port);
     
     return bytes_read;
 }
