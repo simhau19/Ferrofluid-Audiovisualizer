@@ -19,4 +19,4 @@ class ADCFast{
 
         void init();
         uint32_t read();
-};
+}; 

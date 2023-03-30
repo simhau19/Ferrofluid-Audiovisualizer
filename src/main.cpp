@@ -3,34 +3,26 @@
 #include "sampleTest.h"
 #include "fft.h"
 #include "ADCFast.h"
+#include "presentFFT.h"
 
 
-uint16_t adc_buffer[1024];
-ADCFast adc(ADC1_CHANNEL_0, 44100, adc_buffer, sizeof(adc_buffer));
+presentFFT test(40000, 13, 12, 14, 27, 26, 25);
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println("Setup");
-  adc.init();
+  test.setup();
+
 }
 
 void loop()
-{
-  const int sample_size = 1024;
-  //Serial.println("Start sampling");
-  
-  unsigned long last_micros = micros();
-  uint32_t read = adc.read();
-  float sampling_time = ((float) micros() - last_micros);
+{ 
 
-  for (int i = 0; i < 1024; i++)
-  {
-    Serial.print("V: ");
-    Serial.println(adc_buffer[i]);
-  }
-  
-  
-  delay(1000);
+  test.resetValues();
+  test.collectSampleData();
+  test.fftMagic();
+  test.makeFrqBands();
+  test.createAnalogueValues();
+  test.sendAnalogueValues();
+
 }
 

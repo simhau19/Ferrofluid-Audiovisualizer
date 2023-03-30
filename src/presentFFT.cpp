@@ -1,23 +1,35 @@
 #include "presentFFT.h"
 
+
+presentFFT::presentFFT(const int sf, uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, uint8_t pin5):
+    sampleFrq{sf},
+    adc{ADCFast(ADC1_CHANNEL_6, sf, adc_buffer, sizeof(adc_buffer))},
+    frqPins{pin0, pin1, pin2, pin3, pin4, pin5} {
+    
+    for (int i = 0; i < pinCount; i++){
+        bandValues[i], analogValues[i] = 0;
+    }
+}
+
+
 void presentFFT::setup(){
     Serial.begin(115200);
 
-    samplingPeriodUs = round(1000000 * (1.0/sampleFrq));
-    pinMode(audioInPin, INPUT);
+    adc.init();
 
     for (int i = 0; i < pinCount; i++){
-    pinMode(frqPins[i], OUTPUT);
+        pinMode(frqPins[i], OUTPUT);
     }
 }
 
 void presentFFT::collectSampleData(){
 
+    adc.read();
+
     for (int i = 0; i < samples; i++){
-    newTime = micros();
-    vReal[i] = analogRead(audioInPin);
-    vImag[i] = 0;
-    while((micros() - newTime) < samplingPeriodUs) {/*waits*/}
+
+        vReal[i] = adc_buffer[i];
+        vImag[i] = 0;
     }
 }
 
@@ -31,55 +43,43 @@ void presentFFT::fftMagic(){
 void presentFFT::makeFrqBands(){
     for (int i = 2; i < (samples/2); i ++){
         if (vReal[i] > 500){
-            if (i <= 4){ bandValues[0] += vReal[i];}
-            if (i > 4 && i <= 10){ bandValues[1] += vReal[i];}
-            if (i > 10 && i <= 28){ bandValues[2] += vReal[i];}
-            if (i > 28 && i <= 77){ bandValues[3] += vReal[i];}
-            if (i > 77 && i <= 210){ bandValues[4] += vReal[i];}
-            if (i > 210 && i <= 572){ bandValues[5] += vReal[i];}
+            if (i <= 2){ bandValues[0] += vReal[i];}
+            if (i > 2 && i <= 5){ bandValues[1] += vReal[i];}
+            if (i > 5 && i <= 13){ bandValues[2] += vReal[i];}
+            if (i > 13 && i <= 34){ bandValues[3] += vReal[i];}
+            if (i > 34 && i <= 88){ bandValues[4] += vReal[i];}
+            if (i > 88 && i <= 232){ bandValues[5] += vReal[i];}
 
         }
     }
 }
 
 void presentFFT::createAnalogueValues(){
-    /*
-    for (int i = 0; i < pinCount; i++){
-        Serial.println(bandVerdier[i]);
-    }
-    */
 
-    //Serial.print(sumBandVerdi);
-
-    for (int i = 0; i < pinCount; i++){
-        sumBandValue += bandValues[i];
+    for (int j = 0; j < pinCount; j++){
+        sumBandValue += bandValues[j];
     }
 
-    //Serial.println(sumBandVerdi);
 
-
-    for (int i = 0; i < pinCount; i++){
+    for (int k = 0; k < pinCount; k++){
         if (sumBandValue != 0){
-            analogValues[i] = ((bandValues[i]*255)/sumBandValue);
+            analogValues[k] = (255*(bandValues[k]/sumBandValue));
         }
     }
-
-    /*
-    for (int i = 0; i < pinCount; i++){
-        Serial.println(bandVerdier[i]);
-    }
-    Serial.println();
-    Serial.println(analogValues[3]);
-    Serial.println();
-
-    */
-    for (int i = 0; i < pinCount; i++){
-        Serial.println(analogValues[i]);
-    }
 }
+
 
 void presentFFT::sendAnalogueValues(){
     for (int i = 0; i < pinCount; i++){
         analogWrite(frqPins[i], analogValues[i]);
     }
+}
+
+void presentFFT::resetValues(){
+    sumBandValue = 0;
+
+for (int i = 0; i < pinCount; i++){
+    bandValues[i] = 0;
+    analogValues[i] = 0;
+}
 }
