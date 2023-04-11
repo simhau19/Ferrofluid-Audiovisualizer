@@ -6,7 +6,7 @@
 #include "presentFFT.h"
 
 
-presentFFT test(40000, 13, 12, 14, 27, 26, 25);
+presentFFT test(80000, 13, 12, 14, 27, 26, 25);
 
 void setup()
 {
@@ -21,8 +21,8 @@ void loop()
   test.collectSampleData();
   test.fftMagic();
   test.makeFrqBands();
-  test.createAnalogueValues();
+  test.createAnalogueValues2();
   test.sendAnalogueValues();
-
+  test.plotValues();
 }
 

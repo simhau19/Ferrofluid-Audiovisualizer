@@ -48,7 +48,10 @@ public:
     void collectSampleData();
     void fftMagic();
     void makeFrqBands();
-    void createAnalogueValues();
+    void createAnalogueValues1();
+    void createAnalogueValues2();
     void sendAnalogueValues();
     void resetValues();
+    void printValues();
+    void plotValues();
 };
