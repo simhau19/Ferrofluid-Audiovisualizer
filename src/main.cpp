@@ -17,12 +17,6 @@ void setup()
 void loop()
 { 
 
-  test.resetValues();
-  test.collectSampleData();
-  test.fftMagic();
-  test.makeFrqBands();
-  test.createAnalogueValues2();
-  test.sendAnalogueValues();
-  test.plotValues();
+  test.run();
 }
 

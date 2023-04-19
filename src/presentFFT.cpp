@@ -127,3 +127,14 @@ void presentFFT::plotValues(){
     Serial.println(bandValues[0]);
     Serial.println("\n");
 }
+
+void presentFFT::run(){
+
+  resetValues();
+  collectSampleData();
+  fftMagic();
+  makeFrqBands();
+  createAnalogueValues2();
+  sendAnalogueValues();
+
+}

@@ -14,7 +14,7 @@ private:
     const int samples = SAMPLES;
     const int sampleFrq;
     const int amplitude = 1000;
-    const int noise = 500;
+    const int noise = 1000;
     const int pinCount = PIN_COUNT;
     uint16_t adc_buffer[SAMPLES];
     ADCFast adc;
@@ -54,4 +54,5 @@ public:
     void resetValues();
     void printValues();
     void plotValues();
+    void run()
 };
