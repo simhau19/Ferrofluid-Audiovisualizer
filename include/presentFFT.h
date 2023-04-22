@@ -37,6 +37,8 @@ public:
     const uint8_t frqPins[PIN_COUNT];
     int bandValues[PIN_COUNT];
     int analogValues[PIN_COUNT];
+    int prevBandValues[PIN_COUNT];
+    int prevAnalogValues[PIN_COUNT];
     
     int sumBandValue = 0;
 
@@ -49,12 +51,18 @@ public:
     void setup();
     void collectSampleData();
     void fftMagic();
-    void makeFrqBands();
+    void makeFrqBandsOG();
+    void makeFrqBandsHalf();
     void createAnalogueValues1();
     void createAnalogueValues2();
+    void createAnalogueValues3();
     void sendAnalogueValues();
     void resetValues();
     void printValues();
     void plotValues();
     void run();
+<<<<<<< HEAD
+=======
+    void drag(int &x);
+>>>>>>> 5f7b37dcebe733365bee5c8cda06dac806bc0268
 };
