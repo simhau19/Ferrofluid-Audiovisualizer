@@ -41,14 +41,14 @@ void presentFFT::fftMagic(){
 }
 
 void presentFFT::makeFrqBands(){
-    for (int i = 2; i < (samples/2); i ++){
+    for (int i = 0; i < (samples/2); i ++){
         if (vReal[i] > 1000){
-            if (i <= 2){ bandValues[0] += vReal[i];}
-            if (i > 2 && i <= 5){ bandValues[1] += vReal[i];}
-            if (i > 5 && i <= 13){ bandValues[2] += vReal[i];}
-            if (i > 13 && i <= 34){ bandValues[3] += vReal[i];}
+            if (i <= 2){ bandValues[0] += vReal[i]*0.8;}
+            if (i > 2 && i <= 5){ bandValues[1] += vReal[i]*0.8;}
+            if (i > 5 && i <= 13){ bandValues[2] += vReal[i]*0.8;}
+            if (i > 13 && i <= 34){ bandValues[3] += vReal[i]*0.8;}
             if (i > 34 && i <= 88){ bandValues[4] += vReal[i];}
-            if (i > 88 && i <= 232){ bandValues[5] += vReal[i];}
+            if (i > 88 && i <= 200){ bandValues[5] += vReal[i];}
 
         }
     }
@@ -129,12 +129,40 @@ void presentFFT::plotValues(){
 }
 
 void presentFFT::run(){
-
+    
   resetValues();
   collectSampleData();
   fftMagic();
   makeFrqBands();
   createAnalogueValues2();
-  sendAnalogueValues();
+
+  analogWrite(27, 255);
+
+    for (int i = 0; i < pinCount; i++)
+    {
+        if(analogValues[i] > 10){
+            last_music_millis = millis();
+            break;
+        }
+    }
+
+    if(millis() - last_music_millis > 1000){ // 1s since last music signal
+        //Idle mode
+        uint32_t active_index = (millis() % (500*pinCount)) / 500; //500ms per magnet
+        
+        for (int i = 0; i < pinCount; i++)
+        {
+            if( i == active_index){
+                analogWrite(frqPins[i], 255);
+            }else{
+                analogWrite(frqPins[i], 0);
+            }
+        }
+        
+    }else{
+        //Not idle mode
+        sendAnalogueValues();
+    }
+  
 
 }

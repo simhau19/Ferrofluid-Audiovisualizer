@@ -19,6 +19,8 @@ private:
     uint16_t adc_buffer[SAMPLES];
     ADCFast adc;
 
+    uint32_t last_music_millis = 0;
+
 public:
 
     presentFFT(const int sf, uint8_t pin0, uint8_t pin1, uint8_t pin2, uint8_t pin3, uint8_t pin4, uint8_t pin5);
@@ -54,5 +56,5 @@ public:
     void resetValues();
     void printValues();
     void plotValues();
-    void run()
+    void run();
 };
