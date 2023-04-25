@@ -40,29 +40,15 @@ void presentFFT::fftMagic(){
     FFT.ComplexToMagnitude();
 }
 
-void presentFFT::makeFrqBandsOG(){
+void presentFFT::makeFrqBands(){
     for (int i = 0; i < (samples/2); i ++){
         if (vReal[i] > 1000){
-            if (i <= 0){ bandValues[0] += vReal[i];}
-            if (i > 2 && i <= 5){ bandValues[1] += vReal[i];}
-            if (i > 5 && i <= 13){ bandValues[2] += vReal[i];}
-            if (i > 13 && i <= 34){ bandValues[3] += vReal[i];}
+            if (i <= 2){ bandValues[0] += vReal[i]*0.8;}
+            if (i > 2 && i <= 5){ bandValues[1] += vReal[i]*0.8;}
+            if (i > 5 && i <= 13){ bandValues[2] += vReal[i]*0.8;}
+            if (i > 13 && i <= 34){ bandValues[3] += vReal[i]*0.8;}
             if (i > 34 && i <= 88){ bandValues[4] += vReal[i];}
             if (i > 88 && i <= 232){ bandValues[5] += vReal[i];}
-
-        }
-    }
-}
-
-void presentFFT::makeFrqBandsHalf(){
-    for (int i = 2; i < (samples/2); i ++){
-        if (vReal[i] > 1000){
-            if (i <= 2){ bandValues[0] += vReal[i];}
-            if (i > 2 && i <= 4){ bandValues[1] += vReal[i];}
-            if (i > 6 && i <= 11){ bandValues[2] += vReal[i];}
-            if (i > 17 && i <= 30){ bandValues[3] += vReal[i];}
-            if (i > 48 && i <= 81){ bandValues[4] += vReal[i];}
-            if (i > 130 && i <= 237){ bandValues[5] += vReal[i];}
 
         }
     }
@@ -167,15 +153,41 @@ void presentFFT::plotValues(){
 }
 
 void presentFFT::run(){
-
+    
   resetValues();
   collectSampleData();
   fftMagic();
-  makeFrqBandsOG();
+  makeFrqBands();
   createAnalogValues2();
-  sendAnalogValues();
 
-}
+  analogWrite(27, 255);
+
+    for (int i = 0; i < pinCount; i++)
+    {
+        if(analogValues[i] > 10){
+            last_music_millis = millis();
+            break;
+        }
+    }
+
+    if(millis() - last_music_millis > 1000){ // 1s since last music signal
+        //Idle mode
+        uint32_t active_index = (millis() % (500*pinCount)) / 500; //500ms per magnet
+        
+        for (int i = 0; i < pinCount; i++)
+        {
+            if( i == active_index){
+                analogWrite(frqPins[i], 255);
+            }else{
+                analogWrite(frqPins[i], 0);
+            }
+        }
+        
+    }else{
+        //Not idle mode
+        sendAnalogValues();
+    }
+}  
 
 void presentFFT::drag(int &x){
     analogWrite(33, x);
