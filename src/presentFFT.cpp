@@ -69,7 +69,7 @@ void presentFFT::makeFrqBandsHalf(){
 }
 
 
-void presentFFT::createanalogValues1(){
+void presentFFT::createAnalogValues1(){
 
     for (int j = 0; j < pinCount; j++){
         sumBandValue += bandValues[j];
@@ -83,7 +83,7 @@ void presentFFT::createanalogValues1(){
     }
 }
 
-void presentFFT::createanalogValues2(){
+void presentFFT::createAnalogValues2(){
 
     int divider;
     for (int k = 0; k < pinCount; k++){
@@ -103,7 +103,7 @@ void presentFFT::createanalogValues2(){
     }
 }
 
-void presentFFT::createanalogValues3(){
+void presentFFT::createAnalogValues3(){
 
 
     for (int k = 0; k < pinCount; k++){
@@ -123,7 +123,7 @@ void presentFFT::createanalogValues3(){
 
 
 
-void presentFFT::sendanalogValues(){
+void presentFFT::sendAnalogValues(){
     for (int i = 0; i < pinCount; i++){
         analogWrite(frqPins[i], analogValues[i]);
     }
@@ -172,8 +172,8 @@ void presentFFT::run(){
   collectSampleData();
   fftMagic();
   makeFrqBandsOG();
-  createanalogValues2();
-  sendanalogValues();
+  createAnalogValues2();
+  sendAnalogValues();
 
 }
 

@@ -51,10 +51,10 @@ public:
     void fftMagic();
     void makeFrqBandsOG();
     void makeFrqBandsHalf();
-    void createanalogValues1();
-    void createanalogValues2();
-    void createanalogValues3();
-    void sendanalogValues();
+    void createAnalogValues1();
+    void createAnalogValues2();
+    void createAnalogValues3();
+    void sendAnalogValues();
     void resetValues();
     void printValues();
     void plotValues();
