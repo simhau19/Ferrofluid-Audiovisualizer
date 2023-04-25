@@ -23,7 +23,7 @@ void setup()
 void loop()
 { 
 
-  if (sw == 0){
+/*if (sw == 0){
     test.drag(var);
     Serial.println(var);
 
@@ -33,9 +33,9 @@ void loop()
     }
   }
 
-  else if (sw = 1){
-    test.run();
-  }  
+  else if (sw = 1){*/
+  test.run();
+  //}  
   
 }
 
